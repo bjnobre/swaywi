@@ -45,6 +45,14 @@ class WinRow:
 
 SORT_MODES = ["ws", "app", "title", "pid", "id"]
 
+CW_WS = 8
+CW_F = 1
+CW_FL = 2
+CW_ID = 10
+CW_APPCLASS = 30
+CW_ID = 7
+CW_PEOM = 18
+
 
 def run_swaymsg_tree() -> Dict[str, Any]:
     p = subprocess.run(
@@ -243,13 +251,13 @@ class Theme:
 
 
 def build_row_segments(r: WinRow, show_title: bool) -> List[Tuple[str, str]]:
-    ws = (r.ws or "-")[:8].ljust(8)
+    ws = (r.ws or "-")[:CW_WS].ljust(CW_WS)
     focused = "●" if r.focused else " "
     fl = "Y" if r.floating else "N"
-    conid = str(r.con_id).ljust(10)[:10]
-    app = (r.app or "-")[:16].ljust(16)
-    pid = (str(r.pid) if r.pid is not None else "-").rjust(7)[:7]
-    geom = (r.geom or "-")[:18].ljust(18)
+    conid = str(r.con_id).ljust(CW_ID)[:CW_ID]
+    app = (r.app or "-")[:CW_APPCLASS].ljust(CW_APPCLASS)
+    pid = (str(r.pid) if r.pid is not None else "-").rjust(CW_ID)[:CW_ID]
+    geom = (r.geom or "-")[:CW_PEOM].ljust(CW_PEOM)
 
     segments: List[Tuple[str, str]] = [
         (ws, "search"),
@@ -434,13 +442,13 @@ def draw(
     safe_addnstr(stdscr, 1, 0, " " * content_w, content_w, theme.col_header_bar)
 
     cols = [
-        ("WS", 8),
-        ("F", 1),
-        ("FL", 2),
-        ("ID", 10),
-        ("APP/CLASS", 16),
-        ("PID", 7),
-        ("GEOM", 18),
+        ("WS", CW_WS),
+        ("F", CW_F),
+        ("FL", CW_FL),
+        ("ID", CW_ID),
+        ("APP/CLASS", CW_APPCLASS),
+        ("PID", CW_ID),
+        ("GEOM", CW_PEOM),
     ]
     if show_title:
         cols.append(("TITLE", content_w))
